@@ -1,31 +1,38 @@
-# 💰 Smart Budget Pro
+<h1 align="center">💰 Smart Budget Pro</h1>
 
-**Smart Budget Pro** is your personal finance companion built to help you take control of your money with ease and clarity.  
-
----
-
-## ✨ Key Features
-
-✅ Track your **income, expenses, savings, and balance** in real time.  
-📊 View all your **transactions** and get smart financial insights.  
-🎯 Set and monitor **financial goals** that matter to you.  
-📈 See your entire financial life visualized through **interactive graphs**.  
-
-Everyone who aims for financial success needs a clear path. **Smart Budget Pro** gives you that path with simplicity and precision.  
+<p align="center">
+  <b>Your personal finance companion designed to bring clarity, control, and confidence to your money.</b>
+</p>
 
 ---
 
-## 📲 Download
+<h2 align="center">✨ Key Features</h2>
 
-👉 **Available for Android:** [Download on Telegram](https://t.me/c/3291747242/2)  
-🍎 iOS version in progress.  
-🛍️ Will soon be available on the **Google Play Store**.  
+<p align="center">
+  ✅ Track your <b>income, expenses, savings, and balance</b> in real time.<br>
+  📊 View all your <b>transactions</b> and get smart insights.<br>
+  🎯 Set and monitor <b>financial goals</b> that matter to you.<br>
+  📈 Visualize your full financial life through <b>interactive graphs</b>.<br>
+</p>
+
+<p align="center">
+  Everyone who aims for financial success needs a clear path.<br>
+  <b>Smart Budget Pro</b> gives you that path with simplicity and precision.
+</p>
 
 ---
 
-## 📸 App Preview
+<h2 align="center">📲 Download</h2>
 
-Experience how **Smart Budget Pro** looks on Android devices:  
+<p align="center">
+  👉 <b>Available for Android:</b> <a href="https://t.me/c/3291747242/2">Download on Telegram</a><br>
+  🍎 iOS version in progress.<br>
+  🛍️ Coming soon to the <b>Google Play Store</b>.
+</p>
+
+---
+
+<h2 align="center">📸 App Preview</h2>
 
 <p align="center">
   <img src="https://github.com/CephasTechOrg/SmartBudgetPro/blob/main/images-mobile/IMG-20251028-WA0018.jpg" alt="Smart Budget Pro Screenshot 1" width="220" style="border-radius:15px; margin:10px;">
@@ -36,10 +43,21 @@ Experience how **Smart Budget Pro** looks on Android devices:
 
 ---
 
-## 👨‍💻 Developer
+<h2 align="center">👨‍💻 Developer</h2>
 
-Made with ❤️ by **@CephasTechOrg**
+<p align="center">
+  Made with ❤️ by <b>@CephasTechOrg</b>
+</p>
 
 ---
 
-> Smart Budget Pro — because every successful journey begins with smart financial choices.
+<p align="center">
+  <i>"Financial freedom begins when you start paying attention to where every cedi goes."</i><br>
+  — <b>Cephas Osei-Bonsu</b>
+</p>
+
+---
+
+<p align="center">
+  <b>Smart Budget Pro</b> — because every successful journey starts with smart financial choices.
+</p>
