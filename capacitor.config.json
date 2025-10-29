@@ -1,0 +1,6 @@
+{
+  "appId": "com.smartbudget.pro",
+  "appName": "SmartBudgetPro",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

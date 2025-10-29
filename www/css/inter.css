@@ -1,0 +1,73 @@
+/* inter.css — full offline font setup (matching 'webfonts' folder) */
+
+/* Inter Thin - 100 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100;
+  src: url('../webfonts/inter-v20-latin-100.woff2') format('woff2');
+}
+
+/* Inter Extra Light - 200 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 200;
+  src: url('../webfonts/inter-v20-latin-200.woff2') format('woff2');
+}
+
+/* Inter Light - 300 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../webfonts/inter-v20-latin-300.woff2') format('woff2');
+}
+
+/* Inter Regular - 400 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../webfonts/inter-v20-latin-regular.woff2') format('woff2');
+}
+
+/* Inter Medium - 500 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../webfonts/inter-v20-latin-500.woff2') format('woff2');
+}
+
+/* Inter Semi Bold - 600 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../webfonts/inter-v20-latin-600.woff2') format('woff2');
+}
+
+/* Inter Bold - 700 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../webfonts/inter-v20-latin-700.woff2') format('woff2');
+}
+
+/* Inter Extra Bold - 800 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  src: url('../webfonts/inter-v20-latin-800.woff2') format('woff2');
+}
+
+/* Inter Black - 900 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 900;
+  src: url('../webfonts/inter-v20-latin-900.woff2') format('woff2');
+}

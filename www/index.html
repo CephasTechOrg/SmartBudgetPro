@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBudget Pro - Advanced Personal Finance Tracker</title>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/inter.css">
+    <script src="js/chart.min.js"></script>
+    <script src="js/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Welcome to SmartBudget Pro</h2>
+                <p class="modal-subtitle">Set up your profile to get started with advanced financial tracking</p>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="user-name" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="user-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-currency" class="form-label">Preferred Currency</label>
+                        <select class="form-control form-select" id="user-currency" required>
+                            <option value="USD">US Dollar ($)</option>
+                            <option value="GHS">Ghanaian Cedi (₵)</option>
+                            <option value="NGN">Nigerian Naira (₦)</option>
+                            <option value="GBP">British Pound (£)</option>
+                            <option value="XOF">CFA Franc (CFA)</option>
+                            <option value="EUR">Euro (€)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enable-ai-insights" checked>
+                            <span>Enable AI-powered financial insights</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="save-user">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="transaction-modal-title">Add Transaction</h2>
+                <p class="modal-subtitle">Record your income or expense</p>
+            </div>
+            <div class="modal-body">
+                <form id="transaction-form">
+                    <input type="hidden" id="transaction-id">
+                    <div class="form-group">
+                        <label for="transaction-type" class="form-label">Type</label>
+                        <select class="form-control form-select" id="transaction-type" required>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-category" class="form-label">Category</label>
+                        <select class="form-control form-select" id="transaction-category" required>
+                            <option value="Salary">Salary</option>
+                            <option value="Food">Food</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Investment">Investment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="transaction-amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="transaction-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transaction-note" class="form-label">Description</label>
+                        <textarea class="form-control" id="transaction-note" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="transaction-recurring">
+                            <span>This is a recurring transaction</span>
+                        </label>
+                    </div>
+                    <div id="recurring-options" class="hidden">
+                        <div class="form-group">
+                            <label for="recurring-frequency" class="form-label">Frequency</label>
+                            <select class="form-control form-select" id="recurring-frequency">
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close-transaction-modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-transaction">Save Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Budget Modal -->
+    <div id="budget-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="budget-modal-title">Add Budget</h2>
+                <p class="modal-subtitle">Set a spending limit for a category</p>
+            </div>
+            <div class="modal-body">
+                <form id="budget-form">
+                    <input type="hidden" id="budget-id">
+                    <div class="form-group">
+                        <label for="budget-category" class="form-label">Category</label>
+                        <select class="form-control form-select" id="budget-category" required>
+                            <option value="Food">Food</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget-amount" class="form-label">Budget Amount</label>
+                        <input type="number" class="form-control" id="budget-amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget-period" class="form-label">Budget Period</label>
+                        <select class="form-control form-select" id="budget-period">
+                            <option value="monthly">Monthly</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close-budget-modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-budget">Save Budget</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goal Modal -->
+    <div id="goal-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="goal-modal-title">Add Financial Goal</h2>
+                <p class="modal-subtitle">Set a savings target to work towards</p>
+            </div>
+            <div class="modal-body">
+                <form id="goal-form">
+                    <input type="hidden" id="goal-id">
+                    <div class="form-group">
+                        <label for="goal-name" class="form-label">Goal Name</label>
+                        <input type="text" class="form-control" id="goal-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-target" class="form-label">Target Amount</label>
+                        <input type="number" class="form-control" id="goal-target" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-current" class="form-label">Current Amount</label>
+                        <input type="number" class="form-control" id="goal-current" step="0.01" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-deadline" class="form-label">Target Date</label>
+                        <input type="date" class="form-control" id="goal-deadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal-category" class="form-label">Category</label>
+                        <select class="form-control form-select" id="goal-category">
+                            <option value="Savings">Savings</option>
+                            <option value="Emergency Fund">Emergency Fund</option>
+                            <option value="Vacation">Vacation</option>
+                            <option value="Home">Home</option>
+                            <option value="Car">Car</option>
+                            <option value="Education">Education</option>
+                            <option value="Investment">Investment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close-goal-modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-goal">Save Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="logo-text">SmartBudget Pro</div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn notification-btn" id="notification-btn">
+                            <i class="far fa-bell"></i>
+                            <span class="notification-badge hidden" id="notification-badge"></span>
+                        </button>
+                        <button class="icon-btn theme-toggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+            <!-- DASHBOARD SECTION -->
+            <section id="dashboard" class="page active">
+                <div class="container">
+                    <div class="greeting-card">
+                        <h2 class="greeting-text" id="greeting-text">Welcome to SmartBudget Pro!</h2>
+                        <p class="greeting-subtext" id="current-date">Track your finances with advanced insights</p>
+                        <p class="greeting-motivation" id="motivation-text">Start your journey to financial freedom
+                            today!</p>
+                    </div>
+
+                    <!-- AI Insights Section -->
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">AI Financial Insights</h2>
+                            <p class="section-subtitle">Smart analysis of your financial health</p>
+                        </div>
+                    </div>
+
+                    <div class="insights-container" id="insights-container">
+                        <!-- Insights will be dynamically generated here -->
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon income">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <defs>
+                                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#4CAF50" />
+                                            <stop offset="100%" stop-color="#66BB6A" />
+                                        </linearGradient>
+                                    </defs>
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="36"></circle>
+                                    <circle class="progress-ring-circle" cx="40" cy="40" r="36" data-percent="0">
+                                    </circle>
+                                </svg>
+                                <div class="progress-value">0%</div>
+                            </div>
+                            <div class="stat-value" id="total-income">$0.00</div>
+                            <div class="stat-label">Total Income</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon expense">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <defs>
+                                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#FF6584" />
+                                            <stop offset="100%" stop-color="#FF8EA0" />
+                                        </linearGradient>
+                                    </defs>
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="36"></circle>
+                                    <circle class="progress-ring-circle" cx="40" cy="40" r="36" data-percent="0">
+                                    </circle>
+                                </svg>
+                                <div class="progress-value">0%</div>
+                            </div>
+                            <div class="stat-value" id="total-expense">$0.00</div>
+                            <div class="stat-label">Total Expenses</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon balance">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <defs>
+                                        <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#6C63FF" />
+                                            <stop offset="100%" stop-color="#8A84FF" />
+                                        </linearGradient>
+                                    </defs>
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="36"></circle>
+                                    <circle class="progress-ring-circle" cx="40" cy="40" r="36" data-percent="0">
+                                    </circle>
+                                </svg>
+                                <div class="progress-value">0%</div>
+                            </div>
+                            <div class="stat-value" id="current-balance">$0.00</div>
+                            <div class="stat-label">Current Balance</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon savings">
+                                <i class="fas fa-piggy-bank"></i>
+                            </div>
+                            <div class="progress-ring">
+                                <svg width="80" height="80">
+                                    <defs>
+                                        <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#36D1DC" />
+                                            <stop offset="100%" stop-color="#5B86E5" />
+                                        </linearGradient>
+                                    </defs>
+                                    <circle class="progress-ring-bg" cx="40" cy="40" r="36"></circle>
+                                    <circle class="progress-ring-circle" cx="40" cy="40" r="36" data-percent="0">
+                                    </circle>
+                                </svg>
+                                <div class="progress-value">0%</div>
+                            </div>
+                            <div class="stat-value" id="savings-rate">0%</div>
+                            <div class="stat-label">Savings Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Recent Transactions</h2>
+                            <p class="section-subtitle">Your latest financial activities</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-transaction-btn">
+                            <i class="fas fa-plus"></i> Add Transaction
+                        </button>
+                    </div>
+
+                    <div class="transactions-list" id="transactions-list">
+                        <!-- Transactions will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANSACTIONS SECTION -->
+            <section id="transactions" class="page">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">All Transactions</h2>
+                            <p class="section-subtitle">Manage your income and expenses</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-transaction-btn-2">
+                            <i class="fas fa-plus"></i> Add Transaction
+                        </button>
+                    </div>
+
+                    <!-- Transaction Filters -->
+                    <div class="card">
+                        <div class="form-group">
+                            <label for="transaction-filter-type" class="form-label">Filter by Type</label>
+                            <select class="form-control form-select" id="transaction-filter-type">
+                                <option value="all">All Types</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-filter-category" class="form-label">Filter by Category</label>
+                            <select class="form-control form-select" id="transaction-filter-category">
+                                <option value="all">All Categories</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Food">Food</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="transaction-search"
+                                placeholder="Search by description...">
+                        </div>
+                    </div>
+
+                    <div class="transactions-list" id="all-transactions-list">
+                        <!-- All transactions will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGETS SECTION -->
+            <section id="budgets" class="page">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Budget Planner</h2>
+                            <p class="section-subtitle">Set and track your spending limits</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-budget-btn">
+                            <i class="fas fa-plus"></i> Add Budget
+                        </button>
+                    </div>
+
+                    <!-- Budget Insights -->
+                    <div class="suggestions-container">
+                        <h3 class="section-title">Budget Suggestions</h3>
+                        <div id="budget-suggestions">
+                            <!-- Budget suggestions will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <div class="budgets-list" id="budgets-list">
+                        <!-- Budgets will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- GOALS SECTION -->
+            <section id="goals" class="page">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Financial Goals</h2>
+                            <p class="section-subtitle">Track your progress towards financial milestones</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-goal-btn">
+                            <i class="fas fa-plus"></i> Add Goal
+                        </button>
+                    </div>
+
+                    <div class="goals-grid" id="goals-list">
+                        <!-- Goals will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS SECTION -->
+            <section id="analytics" class="page">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Financial Analytics</h2>
+                            <p class="section-subtitle">Visualize your financial data with advanced charts</p>
+                        </div>
+                    </div>
+
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3 class="analytics-card-title">Income Trend</h3>
+                                <i class="fas fa-chart-line" style="color: var(--success);"></i>
+                            </div>
+                            <div class="analytics-card-value" id="analytics-income">$0</div>
+                            <div class="analytics-card-change positive" id="income-change">
+                                <i class="fas fa-arrow-up"></i> <span>0% from last month</span>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3 class="analytics-card-title">Expense Trend</h3>
+                                <i class="fas fa-chart-line" style="color: var(--danger);"></i>
+                            </div>
+                            <div class="analytics-card-value" id="analytics-expenses">$0</div>
+                            <div class="analytics-card-change negative" id="expense-change">
+                                <i class="fas fa-arrow-down"></i> <span>0% from last month</span>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3 class="analytics-card-title">Savings Progress</h3>
+                                <i class="fas fa-piggy-bank" style="color: var(--secondary);"></i>
+                            </div>
+                            <div class="analytics-card-value" id="analytics-savings">$0</div>
+                            <div class="analytics-card-change positive" id="savings-change">
+                                <i class="fas fa-arrow-up"></i> <span>0% of your goal</span>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-card-header">
+                                <h3 class="analytics-card-title">Budget Health</h3>
+                                <i class="fas fa-heart" style="color: var(--primary);"></i>
+                            </div>
+                            <div class="analytics-card-value" id="analytics-budget-health">100%</div>
+                            <div class="analytics-card-change positive" id="budget-health-change">
+                                <i class="fas fa-check"></i> <span>All budgets on track</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Income vs Expenses</h3>
+                        <div class="chart-container">
+                            <canvas id="income-expense-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Spending by Category</h3>
+                        <div class="chart-container">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Monthly Trends</h3>
+                        <div class="chart-container">
+                            <canvas id="trend-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Forecast vs Actual</h3>
+                        <div class="chart-container">
+                            <canvas id="forecast-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS SECTION -->
+            <section id="settings" class="page">
+                <div class="container">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Settings</h2>
+                            <p class="section-subtitle">Customize your SmartBudget Pro experience</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-4">Profile</h3>
+                        <div class="form-group">
+                            <label for="user-name-display" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="user-name-display">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency-select" class="form-label">Currency</label>
+                            <select class="form-control form-select" id="currency-select">
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="GHS">Ghanaian Cedi (₵)</option>
+                                <option value="NGN">Nigerian Naira (₦)</option>
+                                <option value="GBP">British Pound (£)</option>
+                                <option value="XOF">CFA Franc (CFA)</option>
+                                <option value="EUR">Euro (€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable-ai-insights-display" checked>
+                                <span>Enable AI-powered financial insights</span>
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" id="update-profile">
+                            <i class="fas fa-save"></i> Update Profile
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-4">Appearance</h3>
+                        <div class="form-group">
+                            <label for="theme-select" class="form-label">Theme</label>
+                            <select class="form-control form-select" id="theme-select">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                                <option value="auto">Auto (System)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-4">Data Management</h3>
+                        <div class="form-group">
+                            <button class="btn btn-secondary btn-block" id="export-data-btn">
+                                <i class="fas fa-download"></i> Export Data (JSON)
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-secondary btn-block" id="import-data-btn">
+                                <i class="fas fa-upload"></i> Import Data (JSON)
+                            </button>
+                            <input type="file" id="import-file" class="hidden" accept=".json">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-danger btn-block" id="reset-data-btn">
+                                <i class="fas fa-trash"></i> Reset All Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span>Dashboard</span>
+            </a>
+            <a href="#transactions" class="nav-item" data-section="transactions">
+                <div class="nav-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <span>Transactions</span>
+            </a>
+            <a href="#budgets" class="nav-item" data-section="budgets">
+                <div class="nav-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <span>Budgets</span>
+            </a>
+            <a href="#goals" class="nav-item" data-section="goals">
+                <div class="nav-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <span>Goals</span>
+            </a>
+            <a href="#analytics" class="nav-item" data-section="analytics">
+                <div class="nav-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <span>Analytics</span>
+            </a>
+            <a href="#settings" class="nav-item" data-section="settings">
+                <div class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Notification Panel -->
+    <div id="notification-panel" class="modal-overlay hidden">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Notifications</h2>
+                <button class="icon-btn" id="close-notification-panel">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="notifications-list">
+                    <!-- Notifications will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
